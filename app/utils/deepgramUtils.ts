@@ -2,9 +2,21 @@ import { convertFloat32ToInt16, downsample } from "../utils/audioUtils";
 import nextConfig from "next.config.mjs";
 
 export const getApiKey = async () => {
-  const result = await (await fetch(withBasePath("/api/authenticate"), { method: "POST" })).json();
+  const response = await fetch(withBasePath("/api/authenticate"), { method: "POST" });
 
-  return result.key;
+  // Debugging: Log the raw response
+  console.log("Raw API Response:", response);
+
+  const text = await response.text(); // Read response as text
+  console.log("Response Text:", text); // Log the raw response
+
+  try {
+    const result = JSON.parse(text); // Manually parse JSON to catch errors
+    return result.key;
+  } catch (error) {
+    console.error("JSON Parsing Error:", error, "Response Text:", text);
+    throw new Error("Invalid JSON response from /api/authenticate");
+  }
 };
 
 export const sendMicToSocket = (socket: WebSocket) => (event: AudioProcessingEvent) => {
