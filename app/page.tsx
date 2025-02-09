@@ -73,7 +73,7 @@ export default function Home() {
                     </div>
                     {/* Mobile */}
                     <div className="flex md:hidden justify-center text-gray-450 mt-2">
-                      Try saying:
+
                     </div>
                     <div className="scrollable-element w-full flex md:hidden gap-4 items-center mt-4 overflow-x-auto -mr-10">
                       <PromptSuggestions />

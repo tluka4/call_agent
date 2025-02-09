@@ -6,13 +6,7 @@ interface Props extends ComponentPropsWithoutRef<"div"> {
 }
 
 const PopupBody: FC<Props> = ({ onExit, ...props }) => {
-  const ref = useClickAway<HTMLDivElement>(onExit);
-
-  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
-    if (event.key === "Escape") onExit();
-  };
-
-  return <div ref={ref} onKeyDown={handleKeyDown} {...props} />;
+  return null;
 };
 
 export default PopupBody;
