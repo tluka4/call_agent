@@ -8,18 +8,14 @@ import {
   useVoiceBot,
   VoiceBotStatus,
 } from "./context/VoiceBotContextProvider";
-import { CaretIcon } from "./components/icons/CaretIcon";
 import { withBasePath } from "./utils/deepgramUtils";
 import PromptSuggestions from "./components/PromptSuggestions";
 import Conversation from "./components/Conversation";
 import VoiceSelector from "./components/VoiceSelector/VoiceSelector";
 import { isMobile } from "react-device-detect";
-import PopupButton from "./components/PopupButton";
 import MobileMenu from "./components/MobileMenu";
 import Latency from "./components/Latency";
-import { PencilIcon } from "./components/icons/PencilIcon";
 import InstructionInput from "./components/InstructionInput";
-import { TerminalIcon } from "./components/icons/TerminalIcon";
 import Header from "./components/Header";
 import { useStsQueryParams } from "./hooks/UseStsQueryParams";
 import { useDeepgram } from "./context/DeepgramContextProvider";
@@ -27,18 +23,7 @@ import BehindTheScenes from "./components/BehindTheScenes";
 
 const DesktopMenuItems = () => {
   const { instructions } = useStsQueryParams();
-  return (
-    <>
-      <PopupButton
-        buttonIcon={<PencilIcon />}
-        buttonText={
-          <span>Prompt {instructions && <span className="text-green-spring">*</span>}</span>
-        }
-        popupContent={<InstructionInput className="w-96" focusOnMount />}
-        tooltipText={instructions ? "Using your custom prompt. Click to edit." : null}
-      />
-    </>
-  );
+  return null;
 };
 
 export default function Home() {
@@ -74,14 +59,6 @@ export default function Home() {
                   requiresUserActionToInitialize={isMobile}
                 />
               </Suspense>
-              {/* Desktop Conversation Toggle */}
-              {has4ConversationMessages ? (
-                <div className="hidden md:flex justify-center mt-auto mb-4 md:mt-4 text-gray-350">
-                  <button className="text-[14px] text-gray-350 py-4" onClick={toggleConversation}>
-                    See full conversation <CaretIcon className="rotate-90 h-4 w-4" />
-                  </button>
-                </div>
-              ) : null}
 
               {/* Speech Bubbles */}
               {!has4ConversationMessages &&
@@ -90,7 +67,7 @@ export default function Home() {
                 status !== VoiceBotStatus.NONE && (
                   <div>
                     {/* Desktop */}
-                    <div className="hidden md:flex justify-center text-gray-450">Try saying:</div>
+                    <div className="hidden md:flex justify-center text-gray-450"></div>
                     <div className="hidden md:grid max-w-max mx-auto grid-cols-3 gap-4 mt-6 relative">
                       <PromptSuggestions />
                     </div>
@@ -114,18 +91,7 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               {behindTheScenesOpen ? (
                 <BehindTheScenes onClose={() => setBehindTheScenesOpen(false)} />
-              ) : (
-                <>
-                  <button
-                    className="w-full px-4 py-3 bg-gray-850 hover:bg-gray-800 text-gray-25 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setBehindTheScenesOpen(true)}
-                  >
-                    <TerminalIcon className="w-5 h-5" />
-                    <span className="font-medium flex-grow text-left">Backstage</span>
-                    <CaretIcon className="w-5 h-5" />
-                  </button>
-                </>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
@@ -147,15 +113,7 @@ export default function Home() {
       </div>
 
       {/* Mobile Bottom Stuff */}
-      <div className={`flex flex-col z-0 items-center md:hidden`}>
-        {has4ConversationMessages && (
-          <div className="flex justify-center mt-auto text-gray-350">
-            <button className="text-sm text-gray-350 pb-8" onClick={toggleConversation}>
-              See full conversation <CaretIcon className="rotate-90 h-4 w-4" />
-            </button>
-          </div>
-        )}
-      </div>
+      <div className={`flex flex-col z-0 items-center md:hidden`}></div>
 
       {/* Mobile Voice Selector */}
       <Suspense>

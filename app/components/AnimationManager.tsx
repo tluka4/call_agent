@@ -1,75 +1,34 @@
-import React, {
-  useLayoutEffect,
-  useState,
-  useEffect,
-  useRef,
-  type FC,
-  type RefObject,
-} from "react";
-import useResizeObserver from "@react-hook/resize-observer";
-import Hal from "./Hal";
-import { normalizeVolume } from "app/utils/audioUtils";
-
-const useSize = (target: RefObject<HTMLButtonElement> | null) => {
-  const [size, setSize] = useState<DOMRect>(new DOMRect());
-
-  useLayoutEffect(() => {
-    if (!target?.current) return;
-    setSize(target.current.getBoundingClientRect());
-  }, [target]);
-
-  useResizeObserver(target, (entry) => setSize(entry.contentRect));
-  return size;
-};
+import React, { useState, type FC } from "react";
 
 interface Props {
-  agentVoiceAnalyser?: AnalyserNode;
-  userVoiceAnalyser?: AnalyserNode;
   onOrbClick: () => void;
 }
 
-const AnimationManager: FC<Props> = ({
-  agentVoiceAnalyser,
-  userVoiceAnalyser,
-  onOrbClick,
-}: Props) => {
-  const canvasContainer = useRef<HTMLButtonElement>(null);
-  const size = useSize(canvasContainer);
+const AnimationManager: FC<Props> = ({ onOrbClick }) => {
+  const [isListening, setIsListening] = useState(false);
 
-  const [agentVolume, setAgentVolume] = useState(0);
-  const [userVolume, setUserVolume] = useState(0);
-
-  useEffect(() => {
-    if (!agentVoiceAnalyser) return;
-    const dataArrayAgent = new Uint8Array(agentVoiceAnalyser.frequencyBinCount);
-    const getVolume = () => {
-      setAgentVolume(normalizeVolume(agentVoiceAnalyser, dataArrayAgent, 48));
-      requestAnimationFrame(getVolume);
-    };
-    getVolume();
-  }, [agentVoiceAnalyser]);
-
-  useEffect(() => {
-    if (!userVoiceAnalyser) return;
-    const dataArray = new Uint8Array(userVoiceAnalyser.frequencyBinCount);
-    const getVolume = () => {
-      setUserVolume(normalizeVolume(userVoiceAnalyser, dataArray, 48));
-      requestAnimationFrame(getVolume);
-    };
-    getVolume();
-  }, [userVoiceAnalyser]);
+  const handleClick = () => {
+    setIsListening(!isListening);
+    onOrbClick();
+  };
 
   return (
     <div className="flex items-center justify-center">
-      <button ref={canvasContainer} onClick={onOrbClick} className="orb-animation">
-        {canvasContainer.current && (
-          <Hal
-            width={size.width}
-            height={size.height}
-            agentVolume={agentVolume}
-            userVolume={userVolume}
-          />
-        )}
+      <button
+        onClick={handleClick}
+        style={{
+          backgroundColor: isListening ? "#8B0000" : "#556B2F", // Red when listening, forest green otherwise
+          border: "none",
+          padding: "20px 40px",
+          borderRadius: "50px",
+          cursor: "pointer",
+          color: "white",
+          fontSize: "18px",
+          fontWeight: "bold",
+          transition: "background-color 0.3s ease",
+        }}
+      >
+        {isListening ? "Click Again to Stop Listening" : "Start Talking"}
       </button>
     </div>
   );

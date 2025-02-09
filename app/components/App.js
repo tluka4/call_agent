@@ -441,7 +441,7 @@ export const App = ({
           {socketState > 0 && status === VoiceBotStatus.SLEEPING && (
             <div className="text-xl flex flex-col items-center justify-center mt-4 mb-10 md:mt-4 md:mb-10">
               <div className="text-gray-450 text-sm">
-                I&apos;ve stopped listening. {isMobile ? "Tap" : "Click"} the orb to resume.
+                I&apos;ve stopped listening.
               </div>
             </div>
           )}
